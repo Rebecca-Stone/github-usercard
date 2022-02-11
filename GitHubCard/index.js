@@ -1,66 +1,81 @@
 import axios from "axios";
-const cardHolder = document.querySelector("cards");
 
-axios
-  .get(`https://api.github.com/users/Rebecca-Stone`)
-  .then(function (response) {
-    // handle success
-    const gitHubData = response.data;
-    cardHolder.appendChild("card");
-    console.log(gitHubData);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .then(function () {
-    // always executed
-  });
-
-// const followersArray = [];
-
-// const getFollowers = () => {};
-
-function cardMaker(object) {
-  const card = document.createElement("div");
+function cardMaker({
+  avatar_url,
+  name,
+  login,
+  location,
+  html_url,
+  followers,
+  following,
+  bio,
+}) {
+  const profile = document.createElement("div");
   const profilePhoto = document.createElement("img");
   const cardInfo = document.createElement("div");
-  const name = document.createElement("h3");
+  const gitName = document.createElement("h3");
   const userName = document.createElement("p");
-  const location = document.createElement("p");
-  const profile = document.createElement("p");
-  const profileAddress = document.createElement("a");
-  const followers = document.createElement("p");
-  const following = document.createElement("p");
-  const bio = document.createElement("p");
+  const gitLocation = document.createElement("p");
+  const profileLink = document.createElement("p");
+  const gitFollowers = document.createElement("p");
+  const gitFollowing = document.createElement("p");
+  const gitBio = document.createElement("p");
 
-  card.classList.add("card");
+  profile.classList.add("card");
   cardInfo.classList.add("card-info");
-  name.classList.add("name");
+  gitName.classList.add("name");
   userName.classList.add("username");
 
-  card.appendChild(profilePhoto);
-  card.appendChild(cardInfo);
-  cardInfo.appendChild(name);
+  profile.appendChild(profilePhoto);
+  profile.appendChild(cardInfo);
+  cardInfo.appendChild(gitName);
   cardInfo.appendChild(userName);
-  cardInfo.appendChild(location);
-  cardInfo.appendChild(profile);
-  profile.appendChild(profileAddress);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(following);
-  cardInfo.appendChild(bio);
+  cardInfo.appendChild(gitLocation);
+  cardInfo.appendChild(profileLink);
+  cardInfo.appendChild(gitFollowers);
+  cardInfo.appendChild(gitFollowing);
+  cardInfo.appendChild(gitBio);
 
-  profilePhoto.src = object.avatar_url;
-  name.textContent = object.name;
-  userName.textContent = object.login;
-  location.textContent = object.location;
-  profileAddress.textContent = object.html_url;
-  followers.textContent = object.followers;
-  following.textContent = object.following;
-  bio.textContent = object.bio;
+  profilePhoto.src = `${avatar_url}`;
+  gitName.textContent = `${name}`;
+  userName.textContent = `${login}`;
+  gitLocation.textContent = `Location: ${location}`;
+  profileLink.textContent = `Profile ${html_url}`;
+  profileLink.innerHTML = `Profile:
+          <a href= ${html_url}> ${html_url} </a>`;
+  gitFollowers.textContent = `Followers: ${followers}`;
+  gitFollowing.textContent = `Following: ${following}`;
+  gitBio.textContent = `Bio: ${bio}`;
 
-  return card;
+  return profile;
 }
+
+const cardHolder = document.querySelector(".cards");
+
+const followersArray = [];
+
+function addUser(userName) {
+  axios
+    .get(`https://api.github.com/users/${userName}`)
+    .then(function (response) {
+      // handle success
+      followersArray.push(userName);
+      const userGit = cardMaker(response.data);
+      cardHolder.appendChild(userGit);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    });
+}
+
+addUser("Rebecca-Stone")
+addUser("tetondan");
+addUser("dustinmyers");
+addUser("justsml");
+addUser("luishrd");
+addUser("bigknell");
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -110,47 +125,3 @@ function cardMaker(object) {
       </div>
     </div>
 */
-
-/*
-  List of LS Instructors Github username's:
-    tetondan
-    dustinmyers
-    justsml
-    luishrd
-    bigknell
-*/
-
-// {login: 'Rebecca-Stone', id: 96022487, node_id: 'U_kgDOBbkv1w', avatar_url: 'https://avatars.githubusercontent.com/u/96022487?v=4', gravatar_id: '', …}
-// avatar_url: "https://avatars.githubusercontent.com/u/96022487?v=4"
-// bio: "A former CNA learning to code at @bloominstituteoftechnology. Excited to learn more, create my own projects, and hopefully collaborate on some too! "
-// blog: "https://www.linkedin.com/in/rebecca-stone-734443229/"
-// company: null
-// created_at: "2021-12-12T19:32:20Z"
-// email: null
-// events_url: "https://api.github.com/users/Rebecca-Stone/events{/privacy}"
-// followers: 0
-// followers_url: "https://api.github.com/users/Rebecca-Stone/followers"
-// following: 0
-// following_url: "https://api.github.com/users/Rebecca-Stone/following{/other_user}"
-// gists_url: "https://api.github.com/users/Rebecca-Stone/gists{/gist_id}"
-// gravatar_id: ""
-// hireable: null
-// html_url: "https://github.com/Rebecca-Stone"
-// id: 96022487
-// location: "Bloomington, Il, USA"
-// login: "Rebecca-Stone"
-// name: "Rebecca Stone"
-// node_id: "U_kgDOBbkv1w"
-// organizations_url: "https://api.github.com/users/Rebecca-Stone/orgs"
-// public_gists: 1
-// public_repos: 31
-// received_events_url: "https://api.github.com/users/Rebecca-Stone/received_events"
-// repos_url: "https://api.github.com/users/Rebecca-Stone/repos"
-// site_admin: false
-// starred_url: "https://api.github.com/users/Rebecca-Stone/starred{/owner}{/repo}"
-// subscriptions_url: "https://api.github.com/users/Rebecca-Stone/subscriptions"
-// twitter_username: null
-// type: "User"
-// updated_at: "2022-02-08T17:56:49Z"
-// url: "https://api.github.com/users/Rebecca-Stone"
-// [[Prototype]]: Object
